@@ -10,6 +10,8 @@ public class NlpApi {
 	private String json;
 	private String text;
 	private NlpApi response;
+	private String geoloc;
+	private String userid;
 	
 	private String id;
 	private String language;
@@ -18,14 +20,27 @@ public class NlpApi {
 	public NlpApi() {
 		
 	}
-	public NlpApi(String text) {
+	public NlpApi(String text, String geoloc, String userid) {
 		nlp = new NlpApi();
+		if(geoloc=="")
+			this.geoloc = "montreal";
+		else
+			this.geoloc = geoloc;
+		this.userid = userid;
 		gson = new Gson();
 		nlp.setText(text);
 		nlp.language = "en";
 		nlp.id = UUID.randomUUID().toString();
 		
 		setToJsonConversion(nlp);
+	}
+	
+	public String getUserid() {
+		return userid;
+	}
+	
+	public String getGeoloc() {
+		return geoloc;
 	}
 	
 	private void setToJsonConversion(NlpApi obj) {
@@ -44,15 +59,30 @@ public class NlpApi {
 		return "{\"documents\": ["+json+"]}"; 
 	}
 	
-	public void YPBot(ArrayList<String> result, String geoloc) throws Exception {
-		 URL url = new URL("http://api.sandbox.yellowapi.com/FindBusiness/?what" + "hamburger&where=Montreal&pgLen=10&pg=1&sflag=Mc+Donald%27s&dist=1&fmt=JSON&lang=en&UID=montreal&apikey=q5w9347dg7dz3rr4tjyyqk48");
+	public void YPBot(String result, String geoloc, String userID) throws Exception {
+		 URL url = new URL("http://api.sandbox.yellowapi.com/FindBusiness/?what=" +result+"&where="+geoloc+"&pgLen=10&pg=1&&dist=1&fmt=JSON&lang=en&UID=montreal&apikey=q5w9347dg7dz3rr4tjyyqk48");
+		 String resurl = ""+userID;
 		 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 	        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	        String line;
-	        System.out.print("loc " + result);
-	        while ((line = in.readLine()) != null)
-	            System.out.println(line);
+	        PrintWriter out= null;
+	        try 
+	    	{
+	    		out = new PrintWriter(userID +".txt"); //The output is directed to a text file
+	    		while ((line = in.readLine()) != null)
+	            out.println(line);
+	    		TweetBuffer.addToBuffer(resurl, resurl);
 	        in.close();
+	    	} 
+	    	catch (FileNotFoundException e) //This will catch any error found if the File does not exist
+	    	{
+	    		e.printStackTrace();
+	    	}
+	    	finally 
+	    	{
+	    		out.close(); //This will close the printer
+	    	}
+	        
 	        
 	    }
 	
@@ -98,10 +128,12 @@ public class NlpApi {
 
 	      JsonElement phases = root.getAsJsonObject().get("documents");
 	      ArrayList jsonObjList = gson.fromJson(phases, ArrayList.class);
-          System.out.println("List size is : "+jsonObjList.size());
-                  System.out.println("List Elements are  : "+jsonObjList.get(0));
-	      System.out.println("phases size = " + phases.getAsJsonArray().size());
-	      //YPBot(result, "test");
+	      String json1 = (String) jsonObjList.toString();
+	      String extract = json1.substring(14, json1.indexOf("], "));
+	        String convertPlus = extract.replaceAll(", ", "+");
+	      
+	        YPBot(convertPlus, getGeoloc(), getUserid());
+	        
 
 	    } catch (Exception e) {
 	    	
