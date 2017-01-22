@@ -13,8 +13,8 @@ public class YPbot {
         String keywords = keyboard.next();
         System.out.println("What is the location?: ");
         String location = keyboard.next();
-    	URL oracle = new URL("http://api.sandbox.yellowapi.com/FindBusiness/?what="+keywords+"&where="+location+"&pgLen=10&pg=1&sflag=Mc+Donald%27s&dist=1&fmt=JSON&lang=en&UID=montreal&apikey=q5w9347dg7dz3rr4tjyyqk48");
-        URLConnection yc = oracle.openConnection();
+    	URL yp = new URL("http://api.sandbox.yellowapi.com/FindBusiness/?what="+keywords+"&where="+location+"&pgLen=10&pg=1&sflag=Mc+Donald%27s&dist=1&fmt=JSON&lang=en&UID=montreal&apikey=q5w9347dg7dz3rr4tjyyqk48");
+        URLConnection yc = yp.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                                 yc.getInputStream()));
         String inputLine;
