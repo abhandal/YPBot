@@ -41,7 +41,7 @@ public class NlpApi {
 	}
 	
 	public String getJson() {
-		return "{\"documents\": ["+json+"]}"; 
+		return "{\"documents:\" ["+json+"]}"; 
 	}
 	
 	public String KeyPhrase(){

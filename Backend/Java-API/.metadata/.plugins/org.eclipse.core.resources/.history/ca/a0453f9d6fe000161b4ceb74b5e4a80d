@@ -40,16 +40,14 @@ public class NlpApi {
 		return text;
 	}
 	
-	public String getJson() {
-		return "{\"documents\": ["+json+"]}"; 
-	}
-	
 	public String KeyPhrase(){
-		 
+		
+		URL url;
+	    HttpURLConnection connection = null;  
 	    try {
 	      //Create connection
-	    	URL url = new URL("https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases");
-	      HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+	      url = new URL("https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases");
+	      connection = (HttpURLConnection)url.openConnection();
 	      connection.setRequestMethod("POST");
 	      connection.setRequestProperty("Ocp-Apim-Subscription-Key", "981a640d05964de3ae39dbc1209a7b3f");
 	      connection.setRequestProperty("Content-Type", "application/json");
@@ -64,15 +62,16 @@ public class NlpApi {
 	      //Send request
 	      DataOutputStream wr = new DataOutputStream (
 	                  connection.getOutputStream ());
-	      System.out.println(getJson());
-	      wr.writeBytes (getJson());
+	      System.out.println(json);
+	      wr.writeBytes (json);
 	      wr.flush ();
 	      wr.close ();
 
 	      //Get Response	
-	      BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	      StringBuffer response = new StringBuffer(); 
+	      InputStream is = connection.getInputStream();
+	      BufferedReader br = new BufferedReader(new InputStreamReader(is));
 	      String line;
+	      StringBuffer response = new StringBuffer(); 
 	      while((line = br.readLine()) != null) {
 	        response.append(line);
 	        response.append('\r');
@@ -81,10 +80,18 @@ public class NlpApi {
 	      return response.toString();
 
 	    } catch (Exception e) {
-	    	
+	    	JsonParser parser = new JsonParser();
+	    	JsonElement jsonTree = parser.parse(json);
+	    	JsonObject jsonObject = jsonTree.getAsJsonObject();
+	        JsonElement f1 = jsonObject.get("errors");
 	      e.printStackTrace();
 	      return null;
 
-	    }
+	    } finally {
+
+	      if(connection != null) {
+	        connection.disconnect(); 
+	      }
+	    }	
 	}
 }

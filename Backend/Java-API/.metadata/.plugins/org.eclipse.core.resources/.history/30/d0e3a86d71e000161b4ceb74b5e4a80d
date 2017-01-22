@@ -41,7 +41,7 @@ public class NlpApi {
 	}
 	
 	public String getJson() {
-		return "{\"documents\": ["+json+"]}"; 
+		return "\"documents:\" ["+json+"]}"; 
 	}
 	
 	public String KeyPhrase(){
@@ -65,7 +65,7 @@ public class NlpApi {
 	      DataOutputStream wr = new DataOutputStream (
 	                  connection.getOutputStream ());
 	      System.out.println(getJson());
-	      wr.writeBytes (getJson());
+	      wr.writeBytes (json);
 	      wr.flush ();
 	      wr.close ();
 
