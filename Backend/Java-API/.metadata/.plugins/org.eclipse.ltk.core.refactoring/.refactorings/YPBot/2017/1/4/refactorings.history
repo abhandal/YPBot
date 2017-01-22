@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;web_api&apos; to &apos;WebApi&apos;&#x0D;&#x0A;- Original project: &apos;YPBot&apos;&#x0D;&#x0A;- Original element: &apos;web_api&apos;&#x0D;&#x0A;- Renamed element: &apos;WebApi&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;web_api&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;{web_api.java[web_api" matchStrategy="1" name="WebApi" qualified="false" references="true" similarDeclarations="false" stamp="1485050440055" textual="false" version="1.0"/>
+</session>
