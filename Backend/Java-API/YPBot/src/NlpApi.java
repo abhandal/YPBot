@@ -44,7 +44,19 @@ public class NlpApi {
 		return "{\"documents\": ["+json+"]}"; 
 	}
 	
-	public String KeyPhrase(){
+	public void YPBot(ArrayList<String> result, String geoloc) throws Exception {
+		 URL url = new URL("http://api.sandbox.yellowapi.com/FindBusiness/?what" + "hamburger&where=Montreal&pgLen=10&pg=1&sflag=Mc+Donald%27s&dist=1&fmt=JSON&lang=en&UID=montreal&apikey=q5w9347dg7dz3rr4tjyyqk48");
+		 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+	        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	        String line;
+	        System.out.print("loc " + result);
+	        while ((line = in.readLine()) != null)
+	            System.out.println(line);
+	        in.close();
+	        
+	    }
+	
+	public void KeyPhrase(){
 		 
 	    try {
 	      //Create connection
@@ -78,13 +90,23 @@ public class NlpApi {
 	        response.append('\r');
 	      }
 	      br.close();
-	      return response.toString();
+	      
+	      JsonParser parser = new JsonParser();
+	      JsonElement root = parser.parse(response.toString());
+
+	      System.out.println("root = " + root);
+
+	      JsonElement phases = root.getAsJsonObject().get("documents");
+	      ArrayList jsonObjList = gson.fromJson(phases, ArrayList.class);
+          System.out.println("List size is : "+jsonObjList.size());
+                  String x = (String)jsonObjList.get(0));
+          JsonElement phase2 = x.getAsJsonObject().get("keyPhrases");
+	      System.out.println("phases size = " + phases.getAsJsonArray().size());
+	      //YPBot(result, "test");
 
 	    } catch (Exception e) {
 	    	
 	      e.printStackTrace();
-	      return null;
-
 	    }
 	}
 }
