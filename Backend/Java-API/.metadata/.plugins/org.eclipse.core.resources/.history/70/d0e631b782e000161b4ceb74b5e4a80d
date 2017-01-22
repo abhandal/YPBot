@@ -99,7 +99,8 @@ public class NlpApi {
 	      JsonElement phases = root.getAsJsonObject().get("documents");
 	      ArrayList jsonObjList = gson.fromJson(phases, ArrayList.class);
           System.out.println("List size is : "+jsonObjList.size());
-                  System.out.println("List Elements are  : "+jsonObjList.get(0));
+                  String x = (String)jsonObjList.get(0));
+          JsonElement phase2 = x.getAsJsonObject().get("keyPhrases");
 	      System.out.println("phases size = " + phases.getAsJsonArray().size());
 	      //YPBot(result, "test");
 
